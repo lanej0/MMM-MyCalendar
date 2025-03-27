@@ -1,0 +1,13 @@
+{
+  "name": "mmm-mycalendar",
+  "version": "1.0.0",
+  "description": "MagicMirror calendar module",
+  "main": "MMM-MyCalendar.js",
+  "scripts": {
+    "test": "node test_calendar.js"
+  },
+  "dependencies": {
+    "node-ical": "^0.17.0",
+    "moment": "^2.29.4"
+  }
+}

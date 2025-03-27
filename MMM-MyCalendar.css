@@ -25,10 +25,9 @@
   text-align: right;
 }
 
-
 .MMM-MyCalendar table {
   table-layout: fixed;
-  border-collapse:collapse;
+  border-collapse: collapse;
   width: 100%;
 }
 
@@ -40,13 +39,12 @@
   border-bottom: solid 1px #222;
 }
 
-
 .MMM-MyCalendar .calendar-event {
   position: relative;
 }
 
 .MMM-MyCalendar .title {
-  color: #FFF;
+  color: #fff;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -56,9 +54,9 @@
 }
 .MMM-MyCalendar .time,
 .MMM-MyCalendar .location {
-  color: #AAA;
+  color: #aaa;
   white-space: nowrap;
-  display: block;  
+  display: block;
   font-size: 17px;
   line-height: 1.5;
   text-align: left;
@@ -71,10 +69,9 @@
 
 .MMM-MyCalendar .calendar-event.with-symbol .title,
 .MMM-MyCalendar .calendar-event.with-symbol .time,
-.MMM-MyCalendar .calendar-event.with-symbol .location {  
+.MMM-MyCalendar .calendar-event.with-symbol .location {
   margin-left: 30px;
 }
-
 
 .MMM-MyCalendar .symbol {
   font-size: 14px;
@@ -106,3 +103,178 @@
   fill: currentColor;
 }
 
+.loading-placeholder {
+  animation: loading 1.5s infinite;
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.load-more {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.load-more-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.load-more-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.load-more-button:active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.calendar-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.calendar-events {
+  margin: 10px 0;
+}
+
+.event-count {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  gap: 15px;
+}
+
+.pagination-btn {
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: opacity 0.3s ease;
+}
+
+.pagination-btn:hover:not(.disabled) {
+  opacity: 0.8;
+}
+
+.pagination-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-info {
+  min-width: 80px;
+  text-align: center;
+}
+
+.event-title {
+  margin-bottom: 4px;
+}
+
+.event-location {
+  margin-top: 2px;
+  font-size: 90%;
+}
+
+/* Responsive design */
+@media screen and (max-width: 480px) {
+  .calendar-container {
+    padding: 0 10px;
+  }
+
+  .pagination-controls {
+    gap: 10px;
+  }
+
+  .page-info {
+    min-width: 60px;
+  }
+}
+
+/* Loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.loading-placeholder {
+  animation-duration: 1.25s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: shimmer;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #2c2c2c 8%, #383838 18%, #2c2c2c 33%);
+  background-size: 800px 104px;
+  position: relative;
+}
+
+/* Fade effect for events */
+.calendar-events table tr {
+  transition: opacity 0.3s ease;
+}
+
+/* Symbol styling */
+.symbol {
+  width: 25px;
+  text-align: center;
+}
+
+.symbol .fa {
+  font-size: 0.9em;
+}
+
+/* Title styling */
+.title {
+  padding: 0 10px;
+}
+
+/* Time styling */
+.time {
+  min-width: 65px;
+  text-align: right;
+  padding-left: 10px;
+}
+
+/* Table styling */
+.calendar-events table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+.calendar-events tr {
+  line-height: 1.4;
+}
+
+.calendar-events td {
+  padding: 4px 0;
+}
+
+/* Hover effect */
+.calendar-events tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease;
+}
