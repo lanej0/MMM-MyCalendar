@@ -9,7 +9,6 @@ const Log = require("logger");
 const NodeHelper = require("node_helper");
 const ical = require("node-ical");
 const https = require("https");
-const fetch = require("node-fetch");
 const moment = require("moment");
 
 /**
@@ -182,7 +181,7 @@ const CalendarFetcher = function (
             )}`;
     }
 
-    const fetchOptions = {
+    const requestOptions = {
       headers,
       agent: selfSignedCert
         ? new https.Agent({ rejectUnauthorized: false })
@@ -190,12 +189,28 @@ const CalendarFetcher = function (
       timeout: 10000, // 10 second timeout
     };
 
-    fetch(url, fetchOptions)
-      .then(NodeHelper.checkFetchStatus)
-      .then((response) => response.text())
-      .then((responseData) => {
+    // Use native https.get instead of node-fetch
+    const request = https.get(url, requestOptions, (response) => {
+      let data = "";
+
+      // Handle HTTP status codes
+      if (response.statusCode < 200 || response.statusCode >= 400) {
+        const error = new Error(
+          `Request failed with status code ${response.statusCode}`
+        );
+        error.response = response;
+        fetchFailedCallback(this, error);
+        scheduleTimer();
+        return;
+      }
+
+      response.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      response.on("end", () => {
         try {
-          const data = ical.parseICS(responseData);
+          const calendarData = ical.parseICS(data);
           const processedEvents = processEvents(
             data,
             currentPage,
@@ -234,12 +249,26 @@ const CalendarFetcher = function (
           fetchFailedCallback(this, error);
         }
         scheduleTimer();
-      })
-      .catch((error) => {
-        Log.error("Calendar Fetch Failed:", error);
-        fetchFailedCallback(this, error);
-        scheduleTimer();
       });
+    });
+
+    // Handle request errors
+    request.on("error", (error) => {
+      Log.error("Calendar Fetch Failed:", error);
+      fetchFailedCallback(this, error);
+      scheduleTimer();
+    });
+
+    // Handle timeout
+    request.on("timeout", () => {
+      request.destroy();
+      const error = new Error("Request timeout");
+      Log.error("Calendar Fetch Timeout:", error);
+      fetchFailedCallback(this, error);
+      scheduleTimer();
+    });
+
+    request.end();
   };
 
   /**
